@@ -26,12 +26,63 @@ namespace Battle_IT3A
     public MainWindow()
     {
       InitializeComponent();
+
       player1 = new Unit(500, 20);
       player1.HitBox = new Rectangle();
-      player1.HitBox.Width = 40;
-      player1.HitBox.Height = 80;
-      player1.HitBox.Margin = new Thickness()
+      player1.HitBox.Width = 110;
+      player1.HitBox.Height = 160;
+
       player2 = new Unit(500, 20);
+      player2.HitBox = new Rectangle() { Width = 110, Height = 160 };
+
+      this.Loaded += MainWindow_Loaded;
+    }
+
+    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+      DrawGame();
+    }
+
+    private void DrawGame()
+    {
+      DrawTerrain();
+      DrawPlayer(player1, true);
+      DrawPlayer(player2, false);
+    }
+
+    private void DrawPlayer(Unit player, bool left)
+    {
+      Image image = new Image();
+      image.Height = player.HitBox.Height;
+      image.Width = player.HitBox.Width;
+      image.Stretch = Stretch.Fill;
+      image.Source = new BitmapImage(new Uri("Img/archer.png", UriKind.Relative));
+
+      Canvas.SetBottom(image, canvas.ActualHeight * 0.05);
+      if (left)
+      {
+        Canvas.SetLeft(image, 20);
+      }
+      else
+      {
+        Canvas.SetRight(image, 20);
+        image.LayoutTransform = new ScaleTransform(-1,1);
+      }
+
+      canvas.Children.Add(image);
+    }
+
+    private void DrawTerrain()
+    {
+      Rectangle rectangle = new Rectangle();
+      rectangle.Width = canvas.ActualWidth;
+      rectangle.Height = canvas.ActualHeight * 0.1;
+      rectangle.Fill = Brushes.Green;
+
+      Canvas.SetLeft(rectangle, 0);
+      Canvas.SetBottom(rectangle, 0);
+
+      canvas.Children.Add(rectangle);
     }
   }
 }
