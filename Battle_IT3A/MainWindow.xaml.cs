@@ -57,6 +57,7 @@ namespace Battle_IT3A
 
     private void DrawGame()
     {
+      canvas.Children.Clear();
       DrawTerrain();
       DrawPlayer(player1, true);
       DrawPlayer(player2, false);
@@ -122,6 +123,19 @@ namespace Battle_IT3A
       Canvas.SetBottom(rectangle, 0);
 
       canvas.Children.Add(rectangle);
+    }
+
+    private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+      if(movingPlayer == player1)
+      {
+        movingPlayer = player2;
+      }
+      else
+      {
+        movingPlayer = player1;
+      }
+      DrawGame();
     }
   }
 }
