@@ -20,6 +20,7 @@ namespace Battle_IT3A
   /// </summary>
   public partial class MainWindow : Window
   {
+    private Unit movingPlayer;
     private Unit player1;
     private Unit player2;
 
@@ -34,6 +35,17 @@ namespace Battle_IT3A
 
       player2 = new Unit(500, 20);
       player2.HitBox = new Rectangle() { Width = 110, Height = 160 };
+
+      Random random = new Random();
+      int value = random.Next(0, 2);
+      if (value == 0)
+      {
+        movingPlayer = player1;
+      }
+      else
+      {
+        movingPlayer = player2;
+      }
 
       this.Loaded += MainWindow_Loaded;
     }
@@ -58,18 +70,45 @@ namespace Battle_IT3A
       image.Stretch = Stretch.Fill;
       image.Source = new BitmapImage(new Uri("Img/archer.png", UriKind.Relative));
 
+      Polygon? polygon = null;
+      if (movingPlayer == player)
+      {
+        polygon = new Polygon();
+        polygon.Points.Add(new Point(0, 0));
+        polygon.Points.Add(new Point(20, 0));
+        polygon.Points.Add(new Point(10, 30));
+        polygon.Fill = Brushes.Red;
+      }
+
+      if (polygon != null)
+      {
+        Canvas.SetBottom(polygon, canvas.ActualHeight * 0.05 + image.Height + 20);
+      }
       Canvas.SetBottom(image, canvas.ActualHeight * 0.05);
       if (left)
       {
+        if(polygon != null)
+        {
+          Canvas.SetLeft(polygon, image.Width / 2);
+        }        
         Canvas.SetLeft(image, 20);
       }
       else
       {
+        if (polygon != null)
+        {
+          Canvas.SetRight(polygon,  image.Width / 2);
+        }
         Canvas.SetRight(image, 20);
-        image.LayoutTransform = new ScaleTransform(-1,1);
+        image.LayoutTransform = new ScaleTransform(-1, 1);
       }
 
       canvas.Children.Add(image);
+      if (polygon != null)
+      {
+        canvas.Children.Add(polygon);
+      }
+
     }
 
     private void DrawTerrain()
